@@ -1,12 +1,12 @@
 <template>
-<v-app>
-    <v-layout column justify-center align-center>
-      <v-navigation-drawer permanent>
+<v-app dark>
+    <v-layout column align-left>
+      <v-navigation-drawer permanent dark app>
         <v-toolbar flat>
           <v-list>
             <v-list-tile>
               <v-list-tile-title class="title">
-                Admin
+                Playground
               </v-list-tile-title>
             </v-list-tile>
           </v-list>
@@ -19,10 +19,11 @@
             v-for="item in items"
             :key="item.title"
           >
-            <v-list-tile-content>
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            </v-list-tile-content>
+           <v-list-tile-content >
+            <nuxt-link :to="item.to">{{ item.title }}</nuxt-link>
+          </v-list-tile-content>
           </v-list-tile>
+         
         </v-list>
       </v-navigation-drawer>
     </v-layout>
@@ -33,12 +34,21 @@
 
 export default {
   components: {
-    items: [
+    
+  },
+  data: () => {
+    return {
+      items: [
         {
-          title: "Create Product",
-          to: "/admin/create/product"
+          title: "Admin",
+          to: "/admin"
+        },
+        {
+          title: "Wizard",
+          to: "/wizard"
         }
-    ]
+      ]
+    }
   }
 }
 </script>
