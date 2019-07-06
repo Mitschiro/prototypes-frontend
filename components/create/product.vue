@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-container style="margin-left: 10%; padding-top: 15%;">
+        <v-container style="padding-top: 5%;">
             <v-layout align-center justify-center column >
 
                 <!-- CREATE -->
@@ -26,12 +26,16 @@
                     </v-autocomplete>
                     <v-text-field label="Order" type="number" v-model="template.order"></v-text-field>
                     <v-text-field label="Version" type="number" v-model="template.version"></v-text-field>
-                    <v-text-field label="ID" type="text" v-model="template.id"></v-text-field>
-                    <v-text-field label="Name" type="text" v-model="template.name"></v-text-field>
+                    <v-text-field clearable label="ID" type="text" v-model="template.id"></v-text-field>
+                    <v-text-field clearable label="Name" type="text" v-model="template.name"></v-text-field>
                     <h3>Labels</h3>
-                    <v-text-field label="DE" type="text" v-model="template.labels.de"></v-text-field>
-                    <v-text-field label="FR" type="text" v-model="template.labels.fr"></v-text-field>
-                    <v-text-field label="EN" type="text" v-model="template.labels.en"></v-text-field>
+                    <v-text-field clearable label="DE" type="text" v-model="template.labels.de"></v-text-field>
+                    <v-text-field clearable label="FR" type="text" v-model="template.labels.fr"></v-text-field>
+                    <v-text-field clearable label="EN" type="text" v-model="template.labels.en"></v-text-field>
+                    <h3>Descriptions</h3>
+                        <v-textarea outline auto-grow autofocus box clearable label="DE" type="text" v-model="template.descriptions.de"></v-textarea>
+                        <v-textarea outline auto-grow autofocus box clearable label="FR" type="text" v-model="template.descriptions.fr"></v-textarea>
+                        <v-textarea outline auto-grow autofocus box clearable label="EN" type="text" v-model="template.descriptions.en"></v-textarea>
                     <h2>Product Root Config</h2>
                     <v-switch label="Is Cloud Product" v-model="template.rootConfig.isCloudProduct" :success="template.rootConfig.isCloudProduct"></v-switch>
                     <v-switch label="Is Connectivity Product" v-model="template.rootConfig.isConnectivityProduct" :success="template.rootConfig.isConnectivityProduct"></v-switch>
@@ -89,12 +93,16 @@
                         </v-autocomplete>
                         <v-text-field label="Order" type="number" v-model="product.order"></v-text-field>
                         <v-text-field label="Version" type="number" v-model="product.version"></v-text-field>
-                        <v-text-field label="ID" type="text" v-model="product.id"></v-text-field>
-                        <v-text-field label="Name" type="text" v-model="product.name"></v-text-field>
+                        <v-text-field clearable label="ID" type="text" v-model="product.id"></v-text-field>
+                        <v-text-field clearable label="Name" type="text" v-model="product.name"></v-text-field>
                         <h3>Labels</h3>
-                        <v-text-field label="DE" type="text" v-model="product.labels.de"></v-text-field>
-                        <v-text-field label="FR" type="text" v-model="product.labels.fr"></v-text-field>
-                        <v-text-field label="EN" type="text" v-model="product.labels.en"></v-text-field>
+                        <v-text-field clearable label="DE" type="text" v-model="product.labels.de"></v-text-field>
+                        <v-text-field clearable label="FR" type="text" v-model="product.labels.fr"></v-text-field>
+                        <v-text-field clearable label="EN" type="text" v-model="product.labels.en"></v-text-field>
+                        <h3>Descriptions</h3>
+                        <v-textarea outline auto-grow autofocus box clearable label="DE" type="text" v-model="product.descriptions.de"></v-textarea>
+                        <v-textarea outline auto-grow autofocus box clearable label="FR" type="text" v-model="product.descriptions.fr"></v-textarea>
+                        <v-textarea outline auto-grow autofocus box clearable label="EN" type="text" v-model="product.descriptions.en"></v-textarea>
                         <h2>Product Root Config</h2>
                         <v-switch label="Is Cloud Product" v-model="product.rootConfig.isCloudProduct" :success="product.rootConfig.isCloudProduct"></v-switch>
                         <v-switch label="Is Connectivity Product" v-model="product.rootConfig.isConnectivityProduct" :success="product.rootConfig.isConnectivityProduct"></v-switch>
@@ -120,6 +128,16 @@
                 <!-- DELETE -->
                 <v-flex v-if="deleteB">
                     <p>test 3</p>
+                    <v-autocomplete
+                        v-model="deleteProductName"
+                        :items="searchProducts"
+                        box
+                        chips
+                        color="blue-grey lighten-2"
+                        label="Select Product"
+                        item-text="name"
+                        item-value="name"
+                    ></v-autocomplete>
                     <v-btn @click="deleteProduct()">Delete</v-btn>
                 </v-flex>
             </v-layout>
@@ -138,6 +156,7 @@
                 searchModules: [],
                 searchProducts: [],
                 updateProductName: '',
+                deleteProductName: '',
                 eligibility: ['fix20', 'flex600', 'flex1000']
             }
         },
@@ -151,7 +170,6 @@
                 }
             },
             updateProduct: async function () {
-                console.log(this.product);
                 try {
                     await axios.put(`http://localhost:8888/api/update/product/${this.updateProductName}`, this.product);
                 } catch (error) {
@@ -159,8 +177,13 @@
                     
                 }
             },
-            deleteProduct: function () {
-
+            deleteProduct: async function () {
+                try {
+                    await axios.delete(`http://localhost:8888/api/delete/product/${this.deleteProductName}`);
+                } catch (error) {
+                    console.error(error);
+                    
+                }
             }
         },
         watch: {
@@ -189,6 +212,15 @@
                     }
                 }
             },
+            'deleteB': async function (newV, oldV) {
+                if (newV) {
+                    let response = await axios.get('http://localhost:8888/api/all/products');
+                    this.searchProducts = [];
+                    for (const item of response.data) {
+                        this.searchProducts.push(item._id);
+                    }
+                }
+            },
             'updateProductName': async function (newV, oldV) {
                 if (newV) {
                     let response = await axios.get(`http://localhost:8888/api/stand_alone/${this.updateProductName}`);
@@ -199,3 +231,4 @@
         }
     }
 </script>
+

@@ -3,12 +3,12 @@
         <v-container style="margin-left: 10%; padding-top: 15%;">
             <v-layout align-center justify-center column fill-height>
                 <h1 style="margin-bottom: 5%;">{{title}}</h1>
+                <v-select chips style="width:15%;" v-model="propPointer" :items="propsList"></v-select>
                 <v-flex>
                     <v-btn fab large outline color="success" @click="createF()">Create</v-btn>
                     <v-btn fab large outline color="orange" @click="updateF()">Update</v-btn>
                     <v-btn fab large outline color="error" @click="deleteF()">Delete</v-btn>
                 </v-flex>
-                <v-select chips style="width:15%;" v-model="propPointer" :items="propsList"></v-select>
                 <product-component v-if="productB" :template="template" :create="create" :update="update" :deleteB="deleteB"></product-component>
                 <module-component v-if="moduleB" :template="template" :create="create" :update="update" :deleteB="deleteB"></module-component>
                 <category-component v-if="categoryB" :template="template" :create="create" :update="update" :deleteB="deleteB"></category-component>
