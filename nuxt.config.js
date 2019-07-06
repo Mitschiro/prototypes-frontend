@@ -42,7 +42,7 @@ module.exports = {
   */
   modules: [
     '@nuxtjs/vuetify',
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
   ],
   /*
   ** vuetify module configuration
@@ -58,6 +58,9 @@ module.exports = {
       error: colors.deepOrange.accent4,
       success: colors.green.accent3
     }
+  },
+  axios: {
+    proxyHeaders: false
   },
   /*
   ** Build configuration
