@@ -168,7 +168,7 @@
             createProduct: async function () {
                 try {
                     await axios.post(`${url}/api/write/new/product/stand_alone`, this.template);
-                    this.$router.go('/');
+                    this.$router.go('/admin');
                 } catch (error) {
                     console.error(error);
                 }
@@ -176,6 +176,7 @@
             updateProduct: async function () {
                 try {
                     await axios.put(`${url}/api/update/product/${this.updateProductName}`, this.product);
+                    this.$router.go('/admin');
                 } catch (error) {
                     console.error(error);
                     
@@ -184,6 +185,7 @@
             deleteProduct: async function () {
                 try {
                     await axios.delete(`${url}/api/delete/product/${this.deleteProductName}`);
+                    this.$router.go('/admin');
                 } catch (error) {
                     console.error(error);
                     

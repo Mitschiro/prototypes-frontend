@@ -102,7 +102,7 @@
             createItem: async function () {
                 try {
                     await axios.post(`${url}/api/write/new/price_pointer`, this.template);
-                    this.$router.go('/');
+                    this.$router.go('/admin');
                 } catch (error) {
                     console.error(error);
                 }
@@ -110,7 +110,7 @@
             updateItem: async function () {
                 try {
                     await axios.put(`${url}/api/update/price_pointer/${this.updateItemName}`, this.item);
-                    this.$router.go('/');
+                    this.$router.go('/admin');
                 } catch (error) {
                     console.error(error);
                     
@@ -119,7 +119,7 @@
             deleteItem: async function () {
                 try {
                     await axios.delete(`${url}/api/delete/price_pointer/${this.deleteItemName}`);
-                    this.$router.go('/');
+                    this.$router.go('/admin');
                 } catch (error) {
                     console.error(error);
                     
