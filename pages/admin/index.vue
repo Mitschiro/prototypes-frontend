@@ -72,7 +72,7 @@ export default {
             let response;
             let url = 'http://localhost:8888';
             if (process.env.NODE_ENV === 'production') {
-                url = 'http://0.0.0.0:8888'
+                url = 'http://40.89.132.210:8888'
             }
             switch (newV) {
                 case 'Product':
