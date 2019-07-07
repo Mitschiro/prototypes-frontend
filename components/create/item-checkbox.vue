@@ -69,15 +69,14 @@
                         <v-switch label="Disabled" v-model="item.disabled" :success="item.disabled"></v-switch>
                         <v-switch label="Has Price Pointers" v-model="item.hasPricePointers" :success="item.hasPricePointers"></v-switch>
                         <v-autocomplete
-                            v-model="item.pricePointers"
+                            v-model="item.pricePointer"
                             :items="searchPricePointers"
                             box
                             chips
                             color="blue-grey lighten-2"
-                            label="Select Modules"
+                            label="Select Price Pointer"
                             item-text="name"
                             item-value="name"
-                            multiple
                         >
                         </v-autocomplete>
                         <v-text-field label="Order" type="number" v-model="item.order"></v-text-field>
@@ -94,7 +93,12 @@
                         <v-textarea outline auto-grow autofocus box clearable label="DE" type="text" v-model="item.descriptions.de"></v-textarea>
                         <v-textarea outline auto-grow autofocus box clearable label="FR" type="text" v-model="item.descriptions.fr"></v-textarea>
                         <v-textarea outline auto-grow autofocus box clearable label="EN" type="text" v-model="item.descriptions.en"></v-textarea>
-                    </v-flex>
+
+                        <h3>Prices</h3>
+                        <v-text-field :disabled="item.hasPricePointers" label="Installation Fees in Euro" type="number" v-model="item.prices.installationFees"></v-text-field>
+                        <v-text-field :disabled="item.hasPricePointers" label="Purchase Fees in Euro" type="number" v-model="item.prices.purchaseFees"></v-text-field>
+                        <v-text-field :disabled="item.hasPricePointers" label="Monthly Fees in Euro" type="number" v-model="item.prices.monthlyFees"></v-text-field>
+                        </v-flex>
                     <v-btn @click="updateItem()">Update</v-btn>
                 </v-flex>
 
@@ -174,19 +178,49 @@
                     }
                 }
             },
+            'item.hasPricePointers': async function (newV, oldV) {
+                if (newV) {
+                    let response = await axios.get('http://localhost:8888/api/all/price_pointers');
+                    this.searchPricePointers = [];
+                    this.fullPricePointers = [];
+                    for (const item of response.data) {
+                        this.searchPricePointers.push(item._id);
+                        this.fullPricePointers.push(item._source);
+                    }
+                }
+            },
             'template.pricePointer': async function (newV, oldV) {
                 if (newV) {
                     const priceP = this.fullPricePointers.find((e) => {
                         return e.id === newV;
                     });
-                    this.template.prices.purchaseFees = priceP.purchaseFees;
-                    this.template.prices.installationFees = priceP.installationFees;
-                    this.template.prices.monthlyFees = priceP.monthlyFees;
+                    if (priceP) {
+                        this.template.prices.purchaseFees = priceP.purchaseFees;
+                        this.template.prices.installationFees = priceP.installationFees;
+                        this.template.prices.monthlyFees = priceP.monthlyFees;
+                    }
                 }else {
                     this.template.pricePointer = '';
                     this.template.prices.purchaseFees = 0;
                     this.template.prices.installationFees = 0;
                     this.template.prices.monthlyFees = 0;
+                }
+            },
+            'item.pricePointer': async function (newV, oldV) {
+                if (newV) {
+                    const priceP = this.fullPricePointers.find((e) => {
+                        return e.id === newV;
+                    });
+                    if (priceP) {
+                        this.item.prices.purchaseFees = priceP.purchaseFees;
+                        this.item.prices.installationFees = priceP.installationFees;
+                        this.item.prices.monthlyFees = priceP.monthlyFees;
+                    }
+                }else {
+                    this.item.pricePointer = '';
+                    this.item.prices.purchaseFees = 0;
+                    this.item.prices.installationFees = 0;
+                    this.item.prices.monthlyFees = 0;
                 }
             },
             'update': async function (newV, oldV) {
@@ -207,9 +241,9 @@
                     }
                 }
             },
-            'updateItemtName': async function (newV, oldV) {
+            'updateItemName': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get(`http://localhost:8888/api/stand_alone/${this.updateItemtName}`);
+                    let response = await axios.get(`http://localhost:8888/api/item/${this.updateItemName}`);
                     this.item = response.data;
                     this.hasItem = true;
                 }
