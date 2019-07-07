@@ -110,6 +110,10 @@
 
 <script>
     import axios from 'axios';
+    let url = 'http://localhost:8888';
+    if (process.env.NODE_ENV === 'production') {
+        url = 'http://0.0.0.0:8888';
+    }
     export default {
         props: ['template', 'create', 'update', 'deleteB'],
         data: function () {
@@ -125,7 +129,7 @@
         methods: {
             createItem: async function () {
                 try {
-                    await axios.post('http://localhost:8888/api/write/new/module', this.template);
+                    await axios.post(`${url}/api/write/new/module`, this.template);
                     this.$router.go('/');
                 } catch (error) {
                     console.error(error);
@@ -133,7 +137,7 @@
             },
             updateItem: async function () {
                 try {
-                    await axios.put(`http://localhost:8888/api/update/module/${this.updateItemName}`, this.item);
+                    await axios.put(`${url}/api/update/module/${this.updateItemName}`, this.item);
                     this.$router.go('/');
                 } catch (error) {
                     console.error(error);
@@ -142,7 +146,7 @@
             },
             deleteItem: async function () {
                 try {
-                    await axios.delete(`http://localhost:8888/api/delete/module/${this.deleteItemName}`);
+                    await axios.delete(`${url}/api/delete/module/${this.deleteItemName}`);
                     this.$router.go('/');
                 } catch (error) {
                     console.error(error);
@@ -153,7 +157,7 @@
         watch: {
             'template.hasCategories': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get('http://localhost:8888/api/all/categories');
+                    let response = await axios.get(`${url}/api/all/categories`);
                     this.searchCategories = [];
                     for (const item of response.data) {
                         this.searchCategories.push(item._id);
@@ -162,7 +166,7 @@
             },
             'item.hasCategories': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get('http://localhost:8888/api/all/categories');
+                    let response = await axios.get(`${url}/api/all/categories`);
                     this.searchCategories = [];
                     for (const item of response.data) {
                         this.searchCategories.push(item._id);
@@ -171,7 +175,7 @@
             },
             'update': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get('http://localhost:8888/api/all/modules');
+                    let response = await axios.get(`${url}/api/all/modules`);
                     this.searchItems = [];
                     for (const item of response.data) {
                         this.searchItems.push(item._id);
@@ -180,7 +184,7 @@
             },
             'deleteB': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get('http://localhost:8888/api/all/modules');
+                    let response = await axios.get(`${url}/api/all/modules`);
                     this.searchItems = [];
                     for (const item of response.data) {
                         this.searchItems.push(item._id);
@@ -189,7 +193,7 @@
             },
             'updateItemName': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get(`http://localhost:8888/api/module/${this.updateItemName}`);
+                    let response = await axios.get(`${url}/api/module/${this.updateItemName}`);
                     this.item = response.data;
                     this.hasItem = true;
                 }

@@ -70,10 +70,14 @@ export default {
     watch: {
         'propPointer': async function (newV, old) {
             let response;
+            let url = 'http://localhost:8888';
+            if (process.env.NODE_ENV === 'production') {
+                url = 'http://0.0.0.0:8888'
+            }
             switch (newV) {
                 case 'Product':
                     try {
-                        response = await axios.get('http://localhost:8888/api/template/products/stand_alone');
+                        response = await axios.get(`${url}/api/template/products/stand_alone`);
                         this.template = response.data;
                         this.productB = true;
                         this.moduleB = false;
@@ -86,7 +90,7 @@ export default {
                     break;
                 case 'Module':
                     try {
-                        response = await axios.get('http://localhost:8888/api/template/module');
+                        response = await axios.get(`${url}/api/template/module`);
                         this.template = response.data;
                         this.productB = false;
                         this.moduleB = true;
@@ -99,7 +103,7 @@ export default {
                     break;
                 case 'Category':
                     try {
-                        response = await axios.get('http://localhost:8888/api/template/category');
+                        response = await axios.get(`${url}/api/template/category`);
                         this.template = response.data;
                         this.productB = false;
                         this.moduleB = false;
@@ -112,7 +116,7 @@ export default {
                     break;
                 case 'Item':
                     try {
-                        response = await axios.get('http://localhost:8888/api/template/items/checkbox');
+                        response = await axios.get(`${url}/api/template/items/checkbox`);
                         this.template = response.data;
                         this.productB = false;
                         this.moduleB = false;
@@ -125,7 +129,7 @@ export default {
                     break;
                 case 'Price-Pointer':
                     try {
-                        response = await axios.get('http://localhost:8888/api/template/pricepointer');
+                        response = await axios.get(`${url}/api/template/pricepointer`);
                         this.template = response.data;
                         this.productB = false;
                         this.moduleB = false;
@@ -145,8 +149,6 @@ export default {
                     this.pricePointerB = false;
                     break;
             }
-            console.log(this.template);
-            
         }
     }
 }

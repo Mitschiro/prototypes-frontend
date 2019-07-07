@@ -81,6 +81,10 @@
 
 <script>
     import axios from 'axios';
+    let url = 'http://localhost:8888';
+    if (process.env.NODE_ENV === 'production') {
+        url = 'http://0.0.0.0:8888';
+    }
     export default {
         props: ['template', 'create', 'update', 'deleteB'],
         data: function () {
@@ -97,7 +101,7 @@
         methods: {
             createItem: async function () {
                 try {
-                    await axios.post('http://localhost:8888/api/write/new/price_pointer', this.template);
+                    await axios.post(`${url}/api/write/new/price_pointer`, this.template);
                     this.$router.go('/');
                 } catch (error) {
                     console.error(error);
@@ -105,7 +109,7 @@
             },
             updateItem: async function () {
                 try {
-                    await axios.put(`http://localhost:8888/api/update/price_pointer/${this.updateItemName}`, this.item);
+                    await axios.put(`${url}/api/update/price_pointer/${this.updateItemName}`, this.item);
                     this.$router.go('/');
                 } catch (error) {
                     console.error(error);
@@ -114,7 +118,7 @@
             },
             deleteItem: async function () {
                 try {
-                    await axios.delete(`http://localhost:8888/api/delete/price_pointer/${this.deleteItemName}`);
+                    await axios.delete(`${url}/api/delete/price_pointer/${this.deleteItemName}`);
                     this.$router.go('/');
                 } catch (error) {
                     console.error(error);
@@ -125,7 +129,7 @@
         watch: {
             'update': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get('http://localhost:8888/api/all/price_pointers');
+                    let response = await axios.get(`${url}/api/all/price_pointers`);
                     this.searchItems = [];
                     for (const item of response.data) {
                         this.searchItems.push(item._id);
@@ -134,7 +138,7 @@
             },
             'deleteB': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get('http://localhost:8888/api/all/price_pointers');
+                    let response = await axios.get(`${url}/api/all/price_pointers`);
                     this.searchItems = [];
                     for (const item of response.data) {
                         this.searchItems.push(item._id);
@@ -143,7 +147,7 @@
             },
             'updateItemName': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get(`http://localhost:8888/api/price_pointer/${this.updateItemName}`);
+                    let response = await axios.get(`${url}/api/price_pointer/${this.updateItemName}`);
                     this.item = response.data;
                     this.hasItem = true;
                 }

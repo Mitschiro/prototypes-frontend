@@ -125,6 +125,10 @@
 
 <script>
     import axios from 'axios';
+    let url = 'http://localhost:8888';
+    if (process.env.NODE_ENV === 'production') {
+        url = 'http://0.0.0.0:8888';
+    }
     export default {
         props: ['template', 'create', 'update', 'deleteB'],
         data: function () {
@@ -141,7 +145,7 @@
         methods: {
             createItem: async function () {
                 try {
-                    await axios.post('http://localhost:8888/api/write/new/item', this.template);
+                    await axios.post(`${url}/api/write/new/item`, this.template);
                     this.$router.go('/');
                 } catch (error) {
                     console.error(error);
@@ -149,7 +153,7 @@
             },
             updateItem: async function () {
                 try {
-                    await axios.put(`http://localhost:8888/api/update/item/${this.updateItemName}`, this.item);
+                    await axios.put(`${url}/api/update/item/${this.updateItemName}`, this.item);
                     this.$router.go('/');
                 } catch (error) {
                     console.error(error);
@@ -158,7 +162,7 @@
             },
             deleteItem: async function () {
                 try {
-                    await axios.delete(`http://localhost:8888/api/delete/item/${this.deleteItemName}`);
+                    await axios.delete(`${url}/api/delete/item/${this.deleteItemName}`);
                     this.$router.go('/');
                 } catch (error) {
                     console.error(error);
@@ -169,7 +173,7 @@
         watch: {
             'template.hasPricePointers': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get('http://localhost:8888/api/all/price_pointers');
+                    let response = await axios.get(`${url}/api/all/price_pointers`);
                     this.searchPricePointers = [];
                     this.fullPricePointers = [];
                     for (const item of response.data) {
@@ -180,7 +184,7 @@
             },
             'item.hasPricePointers': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get('http://localhost:8888/api/all/price_pointers');
+                    let response = await axios.get(`${url}/api/all/price_pointers`);
                     this.searchPricePointers = [];
                     this.fullPricePointers = [];
                     for (const item of response.data) {
@@ -225,7 +229,7 @@
             },
             'update': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get('http://localhost:8888/api/all/items');
+                    let response = await axios.get(`${url}/api/all/items`);
                     this.searchItems = [];
                     for (const item of response.data) {
                         this.searchItems.push(item._id);
@@ -234,7 +238,7 @@
             },
             'deleteB': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get('http://localhost:8888/api/all/items');
+                    let response = await axios.get(`${url}/api/all/items`);
                     this.searchItems = [];
                     for (const item of response.data) {
                         this.searchItems.push(item._id);
@@ -243,7 +247,7 @@
             },
             'updateItemName': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get(`http://localhost:8888/api/item/${this.updateItemName}`);
+                    let response = await axios.get(`${url}/api/item/${this.updateItemName}`);
                     this.item = response.data;
                     this.hasItem = true;
                 }

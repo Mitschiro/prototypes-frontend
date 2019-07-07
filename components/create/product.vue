@@ -147,6 +147,10 @@
 
 <script>
     import axios from 'axios';
+    let url = 'http://localhost:8888';
+    if (process.env.NODE_ENV === 'production') {
+        url = 'http://0.0.0.0:8888';
+    }
     export default {
         props: ['template', 'create', 'update', 'deleteB'],
         data: function () {
@@ -163,7 +167,7 @@
         methods: {
             createProduct: async function () {
                 try {
-                    await axios.post('http://localhost:8888/api/write/new/product/stand_alone', this.template);
+                    await axios.post(`${url}/api/write/new/product/stand_alone`, this.template);
                     this.$router.go('/');
                 } catch (error) {
                     console.error(error);
@@ -171,7 +175,7 @@
             },
             updateProduct: async function () {
                 try {
-                    await axios.put(`http://localhost:8888/api/update/product/${this.updateProductName}`, this.product);
+                    await axios.put(`${url}/api/update/product/${this.updateProductName}`, this.product);
                 } catch (error) {
                     console.error(error);
                     
@@ -179,7 +183,7 @@
             },
             deleteProduct: async function () {
                 try {
-                    await axios.delete(`http://localhost:8888/api/delete/product/${this.deleteProductName}`);
+                    await axios.delete(`${url}/api/delete/product/${this.deleteProductName}`);
                 } catch (error) {
                     console.error(error);
                     
@@ -189,7 +193,7 @@
         watch: {
             'template.hasModules': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get('http://localhost:8888/api/all/modules');
+                    let response = await axios.get(`${url}:8888/api/all/modules`);
                     for (const item of response.data) {
                         this.searchModules.push(item._id);
                     }
@@ -197,7 +201,7 @@
             },
             'product.hasModules': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get('http://localhost:8888/api/all/modules');
+                    let response = await axios.get(`${url}/api/all/modules`);
                     for (const item of response.data) {
                         this.searchModules.push(item._id);
                     }
@@ -205,7 +209,7 @@
             },
             'update': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get('http://localhost:8888/api/all/products');
+                    let response = await axios.get(`${url}/api/all/products`);
                     this.searchProducts = [];
                     for (const item of response.data) {
                         this.searchProducts.push(item._id);
@@ -214,7 +218,7 @@
             },
             'deleteB': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get('http://localhost:8888/api/all/products');
+                    let response = await axios.get(`${url}/api/all/products`);
                     this.searchProducts = [];
                     for (const item of response.data) {
                         this.searchProducts.push(item._id);
@@ -223,7 +227,7 @@
             },
             'updateProductName': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get(`http://localhost:8888/api/stand_alone/${this.updateProductName}`);
+                    let response = await axios.get(`${url}/api/stand_alone/${this.updateProductName}`);
                     this.product = response.data;
                     this.hasProduct = true;
                 }
