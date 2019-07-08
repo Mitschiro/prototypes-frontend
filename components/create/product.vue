@@ -9,7 +9,6 @@
                     <v-switch label="Active" v-model="template.active" :success="template.active"></v-switch>
                     <v-switch label="Disabled" v-model="template.disabled" :success="template.disabled"></v-switch>
                     <v-switch label="Sold Alone" v-model="template.soldAlone" :success="template.soldAlone"></v-switch>
-                    <v-switch label="Has Product Variantes" v-model="template.hasProductVariantes" :success="template.hasProductVariantes"></v-switch>
                     <v-switch label="Has Modules" v-model="template.hasModules" :success="template.hasModules"></v-switch>
                     <v-autocomplete
                         v-if="template.hasModules"
@@ -168,7 +167,7 @@
             createProduct: async function () {
                 try {
                     await axios.post(`${url}/api/write/new/product/stand_alone`, this.template);
-                    this.$router.go('/admin');
+                    return this.$router.go('/admin');
                 } catch (error) {
                     console.error(error);
                 }
@@ -195,7 +194,7 @@
         watch: {
             'template.hasModules': async function (newV, oldV) {
                 if (newV) {
-                    let response = await axios.get(`${url}:8888/api/all/modules`);
+                    let response = await axios.get(`${url}/api/all/modules`);
                     for (const item of response.data) {
                         this.searchModules.push(item._id);
                     }

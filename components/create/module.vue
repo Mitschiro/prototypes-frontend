@@ -10,7 +10,7 @@
                     <v-switch label="Has Categories" v-model="template.hasCategories" :success="template.hasCategories"></v-switch>
                     <v-autocomplete
                         v-if="template.hasCategories"
-                        v-model="template.items"
+                        v-model="template.categories"
                         item-text="id"
                         return-object
                         :items="searchCategories"
@@ -58,7 +58,7 @@
                         <h2>Global Module Settings</h2>
                         <v-switch label="Has Categories" v-model="item.hasCategories" :success="item.hasCategories"></v-switch>
                         <v-autocomplete
-                            v-model="item.items"
+                            v-model="item.categories"
                             :items="searchCategories"
                             box
                             chips

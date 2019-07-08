@@ -8,6 +8,7 @@
                     <v-btn fab large outline color="success" @click="createF()">Create</v-btn>
                     <v-btn fab large outline color="orange" @click="updateF()">Update</v-btn>
                     <v-btn fab large outline color="error" @click="deleteF()">Delete</v-btn>
+                    <v-btn :loading="loadingF" medium outline color="info" @click="build()">Build Products</v-btn>
                 </v-flex>
                 <product-component v-if="productB" :template="template" :create="create" :update="update" :deleteB="deleteB"></product-component>
                 <module-component v-if="moduleB" :template="template" :create="create" :update="update" :deleteB="deleteB"></module-component>
@@ -40,9 +41,11 @@ export default {
             categoryB: false,
             itemB: false,
             pricePointerB: false,
+            loadingF: false,
             propsList: ['None', 'Product', 'Module', 'Category', 'Item', 'Price-Pointer'],
             propPointer: 'None',
-            template: {}
+            template: {},
+            products: []
         }
     },
     components: {
@@ -65,6 +68,24 @@ export default {
         updateF: function () {
             this.update = !this.update;
             this.title = 'Update';
+        },
+        build: async function () {
+            this.loadingF = true;
+            let response;
+            let url = 'http://localhost:8888';
+            if (process.env.NODE_ENV === 'production') {
+                url = 'http://40.89.132.210:8888'
+            }
+            try {
+                console.log(url);
+                
+                await axios.post(`${url}/api/build/products/tree`);
+                this.loadingF = false
+            } catch (error) {
+                // console.log(error);
+                this.loadingF = false
+            }
+            
         }
     },
     watch: {
