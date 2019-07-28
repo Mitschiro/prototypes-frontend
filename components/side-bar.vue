@@ -36,12 +36,16 @@ export default {
         return {
         items: [
             {
-            title: "Admin",
-            to: "/admin"
+              title: "Admin",
+              to: "/admin"
             },
             {
-            title: "Wizard",
-            to: "/wizard"
+              title: "Wizard",
+              to: "/wizard"
+            },
+            {
+              title: "Items Preview",
+              to: "/items"
             }
         ]
         }
