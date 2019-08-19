@@ -92,10 +92,6 @@ export default {
         build: async function () {
             this.loadingF = true;
             let response;
-            // let url = 'http://localhost:8888';
-            // if (process.env.NODE_ENV === 'production') {
-            //     url = 'http://40.89.132.210:8888'
-            // }
             try {
                 console.log(url);
                 
