@@ -44,6 +44,10 @@ export default {
               to: "/wizard"
             },
             {
+              title: "Rules",
+              to: "/rules"
+            },
+            {
               title: "Items Preview",
               to: "/items"
             }

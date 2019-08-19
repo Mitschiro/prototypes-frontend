@@ -59,14 +59,20 @@ export default {
     methods: {
         createF: function () {
             this.create = !this.create;
+            this.deleteB = false;
+            this.update = false;
             this.title = 'Create';
         },
         deleteF: function () {
             this.deleteB = !this.deleteB;
+            this.create = false;
+            this.update = false;
             this.title = 'Delete';
         },
         updateF: function () {
             this.update = !this.update;
+            this.create = false;
+            this.deleteB = false;
             this.title = 'Update';
         },
         build: async function () {

@@ -19,7 +19,7 @@
                                 <h3>Items</h3>
                             </div>
                             <div style="border: 2px solid white; border-radius: 10px; margin: 5% 0; padding: 5%;" v-for="item in category.items">
-                                <v-switch :label="item.labels.en" v-model="item.value" :success="item.value"></v-switch>
+                                <v-switch :label="item.labels.en" v-model="item.value" :success="item.value" @change="inactRule(item)"></v-switch>
                                 <p>Description: {{item.descriptions.en}}</p>
                                 <p>Purchase Fees: {{item.prices.purchaseFees}} Euro</p>
                                 <p>Installation Fees: {{item.prices.installationFees}} Euro</p>
@@ -67,6 +67,29 @@ export default {
         },
         setModule: function (m) {
             this.selectedModule = m;
+        },
+        inactRule: function (item) {
+            if (item.rules.length > 0) {
+                for (const rule of item.rules) {
+                    console.log(1);
+                    
+                    if (rule.if.value === item.value) {
+                        for (const activeRule of rule.then) {
+                            console.log(activeRule);
+                            
+                            for (const productModule of this.selectedProduct.modules) {
+                                for (const category of productModule.categories) {
+                                    for (const productItem of category.items) {
+                                        if (activeRule.target === productItem.name) {
+                                            productItem.value = activeRule.value;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     watch: {
